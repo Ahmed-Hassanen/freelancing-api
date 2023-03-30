@@ -1,6 +1,7 @@
 const express = require("express");
 
 const projectRouter = require("./routes/projectRouter");
+const offerRouter = require("./routes/offerRoute");
 
 const app = express();
 
@@ -11,5 +12,6 @@ app.get("/api/v1", (req, res) => {
 });
 
 app.use("/api/v1/projects", projectRouter);
+app.use("/api/v1/offers", offerRouter);
 
 module.exports = app;
