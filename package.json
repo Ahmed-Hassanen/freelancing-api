@@ -1,7 +1,7 @@
 {
   "name": "freelancing-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "1. Ahmed Mohamed Hassanen\r 2. Ahmed Magdy\r 3. Ahmed Achraf\r 4. Mohamed Mostafa\r 5. Mario George",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -26,5 +26,6 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
     "validator": "^13.9.0"
-  }
+  },
+  "keywords": []
 }
