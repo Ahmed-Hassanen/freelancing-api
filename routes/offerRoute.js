@@ -4,6 +4,7 @@ const offerController = require("../controllers/offerController");
 
 router
   .route("/")
+  .get(offerController.getAllOffers)
   .post(offerController.createOffer);
 
 module.exports = router;
