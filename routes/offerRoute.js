@@ -6,9 +6,10 @@ router
   .route("/")
   .get(offerController.getAllOffers)
   .post(offerController.createOffer);
-  router
+router
   .route("/:id")
   .patch(offerController.updateOffer)
   .delete(offerController.deleteOffer);
-
+router.patch("/:id/accept", offerController.acceptOffer);
+router.patch("/:id/reject", offerController.rejectOffer);
 module.exports = router;

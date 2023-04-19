@@ -26,6 +26,11 @@ const offerSchema = new mongoose.Schema({
     type: Number,
     required: [true, "An Offer must have a bid amount"],
   },
+  status: {
+    type: String,
+    enum: ["pending", "accepted", "rejected"],
+    default: "pending",
+  },
 });
 
 const Offer = mongoose.model("Offer", offerSchema);
