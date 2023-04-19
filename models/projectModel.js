@@ -43,6 +43,11 @@ const projectSchema = new mongoose.Schema({
   },
   createdAt: Date,
 });
+projectSchema.pre(/^find/, function (next) {
+  this.populate({ path: "client", select: "-__v " });
+
+  next();
+});
 projectSchema.pre("save", function (next) {
   this.createdAt = Date.now();
   next();

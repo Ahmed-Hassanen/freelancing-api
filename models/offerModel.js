@@ -32,7 +32,14 @@ const offerSchema = new mongoose.Schema({
     default: "pending",
   },
 });
+offerSchema.pre(/^find/, function (next) {
+  this.populate({ path: "freelancerId", select: "-__v " }).populate({
+    path: "projectId",
+    select: "-__v ",
+  });
 
+  next();
+});
 const Offer = mongoose.model("Offer", offerSchema);
 
 module.exports = Offer;
