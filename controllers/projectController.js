@@ -29,3 +29,23 @@ exports.getAllProjects = async (req, res) => {
     });
   }
 };
+exports.deleteProject = async (req, res) => {
+  try {
+    const project = await Project.findByIdAndDelete(req.params.id);
+    if (!project) {
+      return res.status(404).json({
+        status: "fail",
+        message: "project not found",
+      });
+    }
+    res.status(204).json({
+      status: "success",
+      message: "project deleted successfully",
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};
