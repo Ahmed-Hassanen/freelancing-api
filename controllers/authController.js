@@ -94,6 +94,33 @@ exports.login = async (req, res, next) => {
   }
 };
 
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return next(
+        res.status(401).json({
+          status: "fail",
+          message: "Incorrect email",
+        })
+      );
+    }
+
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.password;
+    await user.save();
+
+    createSendToken(user, 200, req, res);
+  } catch (e) {
+    res.status(400).json({
+      status: "fail",
+      message: e.message,
+    });
+  }
+};
+
 exports.protect = async (req, res, next) => {
   try {
     let token;
