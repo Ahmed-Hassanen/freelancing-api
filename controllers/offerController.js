@@ -11,6 +11,12 @@ exports.getAllOffers = async (req, res) => {
       }
       return isValid;
     });
+    if (offers.length == 0) {
+      return res.status(404).json({
+        status: "fail",
+        message: "no offers found",
+      });
+    }
     res.status(201).json({
       status: "success",
       length: filteredOffers.length,
