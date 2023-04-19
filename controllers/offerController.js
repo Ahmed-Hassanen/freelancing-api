@@ -3,12 +3,18 @@ const Offer = require("../models/offerModel");
 exports.getAllOffers = async (req, res) => {
   try {
     const offers = await Offer.find();
-    res.status(200).json({
+    const filters = req.query;
+    const filteredOffers = offers.filter((offer) => {
+      let isValid = true;
+      for (key in filters) {
+        isValid = isValid && offer[key] == filters[key];
+      }
+      return isValid;
+    });
+    res.status(201).json({
       status: "success",
-      results: offers.length,
-      data: {
-        offers,
-      },
+      length: filteredOffers.length,
+      data: filteredOffers,
     });
   } catch (err) {
     res.status(404).json({
@@ -17,7 +23,28 @@ exports.getAllOffers = async (req, res) => {
     });
   }
 };
-
+exports.getOneOffer = async (req, res) => {
+  try {
+    const offer = await Offer.findById(req.params.id);
+    if (!offer) {
+      return res.status(404).json({
+        status: "fail",
+        message: "ofer not found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      data: {
+        offer,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};
 exports.createOffer = async (req, res) => {
   try {
     const newOffer = await Offer.create(req.body);

@@ -17,10 +17,18 @@ exports.createProject = async (req, res) => {
 exports.getAllProjects = async (req, res) => {
   try {
     const projects = await Project.find();
+    const filters = req.query;
+    const filteredProjects = projects.filter((project) => {
+      let isValid = true;
+      for (key in filters) {
+        isValid = isValid && project[key] == filters[key];
+      }
+      return isValid;
+    });
     res.status(201).json({
       status: "success",
-      results: projects.length,
-      data: projects,
+      length: filteredProjects.length,
+      data: filteredProjects,
     });
   } catch (err) {
     res.status(400).json({
@@ -29,3 +37,4 @@ exports.getAllProjects = async (req, res) => {
     });
   }
 };
+exports;

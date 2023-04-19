@@ -11,6 +11,7 @@ const projectSchema = new mongoose.Schema({
   },
   client: {
     type: mongoose.Schema.ObjectId,
+    ref: "User",
     required: [true, "A project must belong to client ID."],
   },
   minBudget: {
@@ -42,6 +43,11 @@ const projectSchema = new mongoose.Schema({
     required: [true, "A project must have a category."],
   },
   createdAt: Date,
+});
+projectSchema.pre(/^find/, function (next) {
+  this.populate({ path: "client", select: "-__v " });
+
+  next();
 });
 projectSchema.pre("save", function (next) {
   this.createdAt = Date.now();

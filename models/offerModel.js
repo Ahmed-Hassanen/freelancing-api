@@ -7,6 +7,7 @@ const offerSchema = new mongoose.Schema({
   },
   freelancerId: {
     type: mongoose.Schema.ObjectId,
+    ref: "User",
     required: [true, "An Offer must have a Freelancer"],
   },
   projectId: {
@@ -26,6 +27,14 @@ const offerSchema = new mongoose.Schema({
     type: Number,
     required: [true, "An Offer must have a bid amount"],
   },
+});
+offerSchema.pre(/^find/, function (next) {
+  this.populate({ path: "freelancerId", select: "-__v " }).populate({
+    path: "projectId",
+    select: "-__v ",
+  });
+
+  next();
 });
 
 const Offer = mongoose.model("Offer", offerSchema);
