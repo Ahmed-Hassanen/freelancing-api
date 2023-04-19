@@ -30,21 +30,18 @@ exports.getAllProjects = async (req, res) => {
     });
   }
 };
-
-exports.getOneProject = async (req, res) => {
+exports.deleteProject = async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id);
+    const project = await Project.findByIdAndDelete(req.params.id);
     if (!project) {
       return res.status(404).json({
         status: "fail",
         message: "project not found",
       });
     }
-    res.status(200).json({
+    res.status(204).json({
       status: "success",
-      data: {
-        project,
-      },
+      message: "project deleted successfully",
     });
   } catch (err) {
     res.status(400).json({
@@ -52,30 +49,52 @@ exports.getOneProject = async (req, res) => {
       message: err.message,
     });
   }
-};
-
-exports.updateProject = async (req, res) => {
-  try {
-    const projects = await Project.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!projects) {
-      return res.status(404).json({
+  exports.getOneProject = async (req, res) => {
+    try {
+      const project = await Project.findById(req.params.id);
+      if (!project) {
+        return res.status(404).json({
+          status: "fail",
+          message: "project not found",
+        });
+      }
+      res.status(200).json({
+        status: "success",
+        data: {
+          project,
+        },
+      });
+    } catch (err) {
+      res.status(400).json({
         status: "fail",
-        message: "project not found",
+        message: err.message,
       });
     }
-    res.status(200).json({
-      status: "success",
-      data: {
-        projects,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
+  };
+
+  exports.updateProject = async (req, res) => {
+    try {
+      const projects = await Project.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+      });
+      if (!projects) {
+        return res.status(404).json({
+          status: "fail",
+          message: "project not found",
+        });
+      }
+      res.status(200).json({
+        status: "success",
+        data: {
+          projects,
+        },
+      });
+    } catch (err) {
+      res.status(400).json({
+        status: "fail",
+        message: err.message,
+      });
+    }
+  };
 };
