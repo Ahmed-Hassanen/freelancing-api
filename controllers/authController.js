@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
+const { promisify } = require("util");
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -118,4 +119,49 @@ exports.resetPassword = async (req, res, next) => {
       message: e.message,
     });
   }
+};
+
+exports.protect = async (req, res, next) => {
+  try {
+    let token;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    } else if (req.cookies.jwt) {
+      token = req.cookies.jwt;
+    }
+
+    if (!token) {
+      return res.status(401).json({
+        status: "fail",
+        message: "You are not logged in log in first",
+      });
+    }
+
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return res.status(401).json({
+        status: "fail",
+        message: "the user belong to this token does no longer exist",
+      });
+    }
+
+    next();
+  } catch (e) {
+    res.status(404).json({
+      status: "fail",
+      message: e,
+    });
+  }
+};
+
+exports.logout = (req, res) => {
+  res.clearCookie("jwt");
+  res.status(200).json({
+    status: "success",
+  });
 };
