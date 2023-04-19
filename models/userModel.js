@@ -14,10 +14,7 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, "please provide a valid email"],
   },
-  rating: {
-    type: Number,
-    default: 0,
-  },
+ 
   password: {
     type: String,
     minlength: 8,
@@ -34,7 +31,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) { //middle ware
   if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 12);
