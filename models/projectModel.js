@@ -11,6 +11,7 @@ const projectSchema = new mongoose.Schema({
   },
   client: {
     type: mongoose.Schema.ObjectId,
+    ref: "User",
     required: [true, "A project must belong to client ID."],
   },
   minBudget: {

@@ -7,6 +7,7 @@ const offerSchema = new mongoose.Schema({
   },
   freelancerId: {
     type: mongoose.Schema.ObjectId,
+    ref: "User",
     required: [true, "An Offer must have a Freelancer"],
   },
   projectId: {
